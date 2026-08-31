@@ -1,41 +1,19 @@
-name: Deploy Laravel Production
+name: Test Self Hosted Runner
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
-
-  deploy:
-
+  test:
     runs-on: self-hosted
 
     steps:
-
-      - name: Deploy Laravel
+      - name: Test runner
         run: |
-          cd /var/www/test.etechdreams.com/test/testCICD
-
-          echo "Starting deployment..."
-
-          git fetch origin
-          git reset --hard origin/main
-
-          composer install \
-            --no-dev \
-            --prefer-dist \
-            --no-interaction \
-            --optimize-autoloader
-
-          php artisan optimize:clear
-
-          php artisan migrate 
-
-          php artisan config:cache
-          php artisan route:cache
-          php artisan view:cache
-
-          php artisan queue:restart || true
-
-          echo "Deployment completed successfully."
+          echo "CI/CD WORKING"
+          whoami
+          hostname
+          pwd

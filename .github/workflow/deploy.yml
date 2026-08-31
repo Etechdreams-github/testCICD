@@ -1,4 +1,4 @@
-name: Deploy Laravel to testCICD
+name: Deploy Laravel Production
 
 on:
   push:
@@ -6,38 +6,36 @@ on:
       - main
 
 jobs:
+
   deploy:
-    runs-on: ubuntu-latest
+
+    runs-on: self-hosted
 
     steps:
-      - name: Deploy to Hostinger VPS
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
-            cd /var/www/test.etechdreams.com/test/testCICD
 
-            echo "Starting deployment..."
+      - name: Deploy Laravel
+        run: |
+          cd /var/www/test.etechdreams.com/test/testCICD
 
-            git fetch origin
-            git reset --hard origin/main
+          echo "Starting deployment..."
 
-            composer install \
-              --no-dev \
-              --prefer-dist \
-              --no-interaction \
-              --optimize-autoloader
+          git fetch origin
+          git reset --hard origin/main
 
-            php artisan optimize:clear
+          composer install \
+            --no-dev \
+            --prefer-dist \
+            --no-interaction \
+            --optimize-autoloader
 
-            php artisan migrate
+          php artisan optimize:clear
 
-            php artisan config:cache
-            php artisan route:cache
-            php artisan view:cache
+          php artisan migrate 
 
-            php artisan queue:restart || true
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
 
-            echo "Deployment completed."
+          php artisan queue:restart || true
+
+          echo "Deployment completed successfully."

@@ -1,0 +1,26 @@
+name: Test Hostinger Runner
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on:
+      - self-hosted
+      - Linux
+      - X64
+
+    steps:
+      - name: Test connection
+        run: |
+          echo "GitHub Actions connected successfully"
+          echo "User:"
+          whoami
+          echo "Server:"
+          hostname
+          echo "Directory:"
+          pwd
